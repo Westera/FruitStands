@@ -1,5 +1,5 @@
 package model;
 
 public enum Fruit {
-    CHERRY, PEACH
+    CHERRY, PEACH, PEAR
 }
