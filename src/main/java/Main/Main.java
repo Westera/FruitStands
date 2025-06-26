@@ -1,5 +1,6 @@
 package Main;
 
+import functions.AdvancePearWithCherryOrPeach;
 import functions.CherryAndPeachFunction;
 import functions.PearWithCherryOrPeach;
 import model.Fruit;
@@ -56,5 +57,8 @@ public class Main {
 
         PriceOptimizerService.PurchaseInfo purchaseInfo = PriceOptimizerService.getOptimizedPurchaseLocationWithPrice(fruitStands, new PearWithCherryOrPeach());
         System.out.printf("Task 2: You should stop at stand number %d and it will cost: %.2f%n", purchaseInfo.standIndex() + 1, purchaseInfo.cost());
+
+        PriceOptimizerService.DetailedPurchaseInfo detailedPurchaseInfo = PriceOptimizerService.getOptimizedPurchaseLocationWithDetails(fruitStands, new AdvancePearWithCherryOrPeach());
+        System.out.printf("Task 2: You should stop at stand number %d and it will cost: %.2f there you will get %s%n", detailedPurchaseInfo.purchaseInfo().standIndex() + 1, detailedPurchaseInfo.purchaseInfo().cost(), detailedPurchaseInfo.fruits());
     }
 }

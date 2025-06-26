@@ -1,6 +1,8 @@
 package service;
 
+import functions.AdvanceFruitBuyingFunction;
 import functions.FruitBuyingFunction;
+import model.Fruit;
 import model.FruitStand;
 
 import java.util.List;
@@ -17,6 +19,16 @@ public class PriceOptimizerService {
                 .orElseThrow();
     }
 
+    public static DetailedPurchaseInfo getOptimizedPurchaseLocationWithDetails(List<FruitStand> fruitStands, AdvanceFruitBuyingFunction function) {
+        return IntStream
+                .range(0, fruitStands.size())
+                .mapToObj(index -> {
+                    AdvanceFruitBuyingFunction.SpecifiedCost specifiedCost = function.costOfFruitPurchase(fruitStands.get(index));
+                    return new DetailedPurchaseInfo(specifiedCost.fruits(), new PurchaseInfo(index, specifiedCost.cost()));
+                }).min(DetailedPurchaseInfo::compareTo)
+                .orElseThrow();
+    }
+
     public static int getOptimizedPurchaseLocation(List<FruitStand> fruitStands, FruitBuyingFunction function) {
         return getOptimizedPurchaseLocationWithPrice(fruitStands, function).standIndex;
     }
@@ -25,6 +37,13 @@ public class PriceOptimizerService {
         @Override
         public int compareTo(PurchaseInfo o) {
             return Double.compare(cost, o.cost);
+        }
+    }
+
+    public record DetailedPurchaseInfo(List<Fruit> fruits, PurchaseInfo purchaseInfo) implements Comparable<DetailedPurchaseInfo>{
+        @Override
+        public int compareTo(DetailedPurchaseInfo o) {
+            return Double.compare(purchaseInfo.cost, o.purchaseInfo().cost);
         }
     }
 }
